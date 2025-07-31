@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kelas12/home.dart';
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -39,7 +40,7 @@ class _MyWidgetState extends State<MyWidget> {
                       ),
                       _gap(),
                       Text(
-                        'Masuk iuran warga',
+                        'Iuran Warga Kampung Lebak Gede',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey[700],
@@ -57,7 +58,7 @@ class _MyWidgetState extends State<MyWidget> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your username';
+                            return 'Masukan username';
                           }
                           return null;
                         },
@@ -74,7 +75,7 @@ class _MyWidgetState extends State<MyWidget> {
                         obscureText: !_isPasswordVisible,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Masukan password';
                           }
                           return null;
                         },
@@ -97,7 +98,14 @@ class _MyWidgetState extends State<MyWidget> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Processing Data')),
+                                const SnackBar(
+                                    content: Text('Sedang Memproses')),
+                              );
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => home(),
+                                ),
                               );
                             }
                           },
@@ -107,7 +115,7 @@ class _MyWidgetState extends State<MyWidget> {
                       TextButton(
                         onPressed: () {},
                         child: Text(
-                          'Forgot Password?',
+                          'Lupa Password?',
                           style:
                               TextStyle(color: Theme.of(context).primaryColor),
                         ),
