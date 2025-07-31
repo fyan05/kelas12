@@ -1,72 +1,72 @@
 import 'package:flutter/material.dart';
 
-class home extends StatefulWidget {
-  const home({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<home> createState() => _homeState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _homeState extends State<home> {
-  Widget _gap() {
-    return const SizedBox(
-      height: 16,
-    );
-  }
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  final List<Widget> _pages = const [
+    Center(
+        child: Row(
+      children: [
+        Card(
+          elevation: 6,
+          child: Padding(
+            padding: EdgeInsets.all(50),
+            child: Text('Ini adalah Card di Flutter'),
+          ),
+        )
+      ],
+    )),
+    Center(child: Text('Ini halaman Data Warga')),
+    Center(child: Text('Ini halaman data Iuran')),
+    Center(child: Text('Ini halaman keluhan')),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Iuran Warga'),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
+        title: const Text('Aplikasi Iuran Warga'),
+        backgroundColor: const Color.fromARGB(255, 56, 62, 67),
+      ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: NavigationBar(
+        animationDuration: const Duration(
+          milliseconds: 300,
+        ),
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded),
+            label: 'Beranda',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
+            label: 'Data Warga',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.attach_money_outlined),
+            selectedIcon: Icon(Icons.attach_money_rounded),
+            label: 'Data Iuran',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.report_outlined),
+            selectedIcon: Icon(Icons.report_rounded),
+            label: 'Keluhan',
           ),
         ],
-      ),
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text('Menu',
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Data Warga'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.attach_money),
-              title: Text('Data iuran'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.report),
-              title: Text('Keluhan'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-      body: Center(
-        child: Column(
-          children: [],
-        ),
       ),
     );
   }

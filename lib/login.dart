@@ -90,6 +90,7 @@ class _MyWidgetState extends State<MyWidget> {
                             style: TextStyle(fontSize: 18),
                           ),
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 56, 62, 67),
                             padding: EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -104,7 +105,7 @@ class _MyWidgetState extends State<MyWidget> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => home(),
+                                  builder: (context) => HomePage(),
                                 ),
                               );
                             }
