@@ -9,22 +9,128 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = const [
+  final List<Widget> _pages = [
     Center(
-        child: Row(
-      children: [
-        Card(
-          elevation: 6,
-          child: Padding(
-            padding: EdgeInsets.all(50),
-            child: Text('Ini adalah Card di Flutter'),
+      child: ListView(
+        children: [
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            color: Colors.blueGrey[50],
+            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: ListTile(
+              leading: Icon(Icons.attach_money_rounded,
+                  color: Colors.green, size: 32),
+              title: Text(
+                'Total Iuran Bulan Ini',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text('Rp 2.000.000',
+                  style: TextStyle(fontSize: 18, color: Colors.green[700])),
+            ),
           ),
-        )
-      ],
-    )),
-    Center(child: Text('Ini halaman Data Warga')),
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            color: Colors.blueGrey[50],
+            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: ListTile(
+              leading: Icon(Icons.people_rounded, color: Colors.blue, size: 32),
+              title: Text(
+                'Jumlah Warga',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text('120',
+                  style: TextStyle(fontSize: 18, color: Colors.blue[700])),
+            ),
+          ),
+          Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            color: Colors.blueGrey[50],
+            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: ListTile(
+              leading: Icon(Icons.report_rounded, color: Colors.red, size: 32),
+              title: Text(
+                'Keluhan Baru',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text('3',
+                  style: TextStyle(fontSize: 18, color: Colors.red[700])),
+            ),
+          ),
+        ],
+      ),
+    ),
+    Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Data Warga',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ListView(
+              children: [
+                Card(
+                  child: ListTile(
+                    leading:
+                        const Icon(Icons.person_rounded, color: Colors.blue),
+                    title: const Text('Budi Santoso'),
+                    subtitle: const Text('Alamat: Jl. Melati No. 10'),
+                    trailing: Chip(
+                      label: const Text('Lunas'),
+                      backgroundColor: Colors.green[100],
+                      labelStyle: const TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    leading:
+                        const Icon(Icons.person_rounded, color: Colors.blue),
+                    title: const Text('Siti Aminah'),
+                    subtitle: const Text('Alamat: Jl. Mawar No. 5'),
+                    trailing: Chip(
+                      label: const Text('Belum Lunas'),
+                      backgroundColor: Colors.red[100],
+                      labelStyle: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    leading:
+                        const Icon(Icons.person_rounded, color: Colors.blue),
+                    title: const Text('Rudi Hartono'),
+                    subtitle: const Text('Alamat: Jl. Kenanga No. 3'),
+                    trailing: Chip(
+                      label: const Text('Lunas'),
+                      backgroundColor: Colors.green[100],
+                      labelStyle: const TextStyle(color: Colors.green),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
     Center(child: Text('Ini halaman data Iuran')),
-    Center(child: Text('Ini halaman keluhan')),
+    Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: KeluhanPage(),
+    ),
   ];
 
   @override
@@ -68,6 +174,58 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class KeluhanPage extends StatelessWidget {
+  const KeluhanPage({super.key});
+
+  final List<Map<String, String>> keluhanList = const [
+    {
+      'nama': 'Budi Santoso',
+      'keluhan': 'Susah buat login.',
+    },
+    {
+      'nama': 'Siti Aminah',
+      'keluhan':
+          'saya kan sudah bayar iuran bulan ini tetapi mengapa belum ada tanda lunas nya.',
+    },
+    {
+      'nama': 'Rudi Hartono',
+      'keluhan': 'aku ingin nasi padang.',
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.0),
+          child: Text(
+            'Daftar Keluhan Masuk',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: keluhanList.length,
+            itemBuilder: (context, index) {
+              final keluhan = keluhanList[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                child: ListTile(
+                  leading: const Icon(Icons.report_rounded, color: Colors.red),
+                  title: Text(keluhan['keluhan'] ?? ''),
+                  subtitle: Text('Dari: ${keluhan['nama']}'),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
