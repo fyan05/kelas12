@@ -9,7 +9,73 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = [
+
+  final List<Map<String, dynamic>> iuranList = [
+    {
+      'nama': 'Budi',
+      'minggu': 'Minggu 1',
+      'tanggal': '01/08/2025',
+      'jumlah': 10000,
+      'status': 'Lunas'
+    },
+    {
+      'nama': 'Budi',
+      'minggu': 'Minggu 2',
+      'tanggal': '08/08/2025',
+      'jumlah': 10000,
+      'status': 'Lunas'
+    },
+    {
+      'nama': 'Budi',
+      'minggu': 'Minggu 3',
+      'tanggal': '15/08/2025',
+      'jumlah': 10000,
+      'status': 'Belum Lunas'
+    },
+    {
+      'nama': 'Jamal',
+      'minggu': 'Minggu 1',
+      'tanggal': '01/08/2025',
+      'jumlah': 10000,
+      'status': 'Belum Lunas'
+    },
+    {
+      'nama': 'Jamal',
+      'minggu': 'Minggu 2',
+      'tanggal': '08/08/2025',
+      'jumlah': 10000,
+      'status': 'Lunas'
+    },
+    {
+      'nama': 'Jamal',
+      'minggu': 'Minggu 3',
+      'tanggal': '15/08/2025',
+      'jumlah': 10000,
+      'status': 'Belum Lunas'
+    },
+    {
+      'nama': 'Rista',
+      'minggu': 'Minggu 1',
+      'tanggal': '01/08/2025',
+      'jumlah': 10000,
+      'status': 'Lunas'
+    },
+    {
+      'nama': 'Rista',
+      'minggu': 'Minggu 2',
+      'tanggal': '08/08/2025',
+      'jumlah': 10000,
+      'status': 'Lunas'
+    },
+    {
+      'nama': 'Rista',
+      'minggu': 'Minggu 3',
+      'tanggal': '15/08/2025',
+      'jumlah': 10000,
+      'status': 'Lunas'
+    },
+  ];
+  late List<Widget> _pages = [
     Center(
       child: ListView(
         children: [
@@ -98,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                   child: ListTile(
                     leading:
                         const Icon(Icons.person_rounded, color: Colors.blue),
-                    title: const Text('Siti Aminah'),
+                    title: const Text('Jamal'),
                     subtitle: const Text('Alamat: Jl. Mawar No. 5'),
                     trailing: Chip(
                       label: const Text('Belum Lunas'),
@@ -111,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                   child: ListTile(
                     leading:
                         const Icon(Icons.person_rounded, color: Colors.blue),
-                    title: const Text('Rudi Hartono'),
+                    title: const Text('Rista'),
                     subtitle: const Text('Alamat: Jl. Kenanga No. 3'),
                     trailing: Chip(
                       label: const Text('Lunas'),
@@ -126,7 +192,40 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     ),
-    Center(child: Text('Ini halaman data Iuran')),
+    Padding(
+      padding: EdgeInsets.all(16),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          columnSpacing: 16,
+          columns: const [
+            DataColumn(label: Text('Nama Warga')),
+            DataColumn(label: Text('Minggu')),
+            DataColumn(label: Text('Tanggal')),
+            DataColumn(label: Text('Jumlah')),
+            DataColumn(label: Text('Status')),
+          ],
+          rows: iuranList.map<DataRow>((data) {
+            return DataRow(cells: [
+              DataCell(Text(data['nama'])),
+              DataCell(Text(data['minggu'])),
+              DataCell(Text(data['tanggal'])),
+              DataCell(Text('Rp ${data['jumlah']}')),
+              DataCell(
+                Text(
+                  data['status'],
+                  style: TextStyle(
+                    color:
+                        data['status'] == 'Lunas' ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ]);
+          }).toList(),
+        ),
+      ),
+    ),
     Padding(
       padding: const EdgeInsets.all(16.0),
       child: KeluhanPage(),
@@ -187,13 +286,13 @@ class KeluhanPage extends StatelessWidget {
       'keluhan': 'Susah buat login.',
     },
     {
-      'nama': 'Siti Aminah',
+      'nama': 'jamal',
       'keluhan':
           'saya kan sudah bayar iuran bulan ini tetapi mengapa belum ada tanda lunas nya.',
     },
     {
-      'nama': 'Rudi Hartono',
-      'keluhan': 'aku ingin nasi padang.',
+      'nama': 'Rista',
+      'keluhan': 'Bug nya banyak banget, tolong diperbaiki.',
     },
   ];
 
