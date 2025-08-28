@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:kelas12/api-service.dart';
 import 'package:kelas12/home.dart';
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
-  final _formKey = GlobalKey<FormState>();
-  bool _isPasswordVisible = false;
+class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ApiServices apiService = ApiServices();
 
-  Widget _gap() {
-    return const SizedBox(height: 16);
-  }
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,107 +25,113 @@ class _MyWidgetState extends State<MyWidget> {
         child: Card(
           elevation: 8,
           child: Container(
-            padding: EdgeInsets.all(32),
-            constraints: BoxConstraints(
-              maxWidth: 350,
-            ),
+            padding: const EdgeInsets.all(32.0),
+            constraints: const BoxConstraints(maxWidth: 350),
             child: Form(
-                key: _formKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _gap(),
-                      Image.network(
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Seal_of_Tasikmalaya_Regency.svg/800px-Seal_of_Tasikmalaya_Regency.svg.png",
-                        height: 80,
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const FlutterLogo(size: 100),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        hintText: 'Masukkan email',
+                        prefixIcon: Icon(Icons.email_outlined),
+                        border: OutlineInputBorder(),
                       ),
-                      _gap(),
-                      Text(
-                        'Iuran Warga Kampung Lebak Gede',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[700],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      _gap(),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          labelText: 'Username',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Masukan username';
-                          }
-                          return null;
-                        },
-                      ),
-                      _gap(),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          labelText: 'Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        obscureText: !_isPasswordVisible,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Masukan password';
-                          }
-                          return null;
-                        },
-                      ),
-                      _gap(),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          icon: Icon(Icons.login),
-                          label: Text(
-                            'Login',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 56, 62, 67),
-                            padding: EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: !_isPasswordVisible,
+                      decoration: InputDecoration(
+                        labelText: 'Kata Sandi',
+                        hintText: 'Masukkan kata sandi',
+                        prefixIcon: const Icon(Icons.lock_outline_rounded),
+                        border: const OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Sedang Memproses')),
-                              );
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                              );
-                            }
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
                           },
                         ),
                       ),
-                      _gap(),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Lupa Password?',
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Kata sandi tidak boleh kosong';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
+                                  setState(() => _isLoading = true);
+                                  try {
+                                    String token = await apiService.login(
+                                      emailController.text.trim(),
+                                      passwordController.text.trim(),
+                                    );
+                                    if (!mounted) return;
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => HomePage(
+                                          token: token,
+                                          userId: 2,
+                                        ),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(e.toString()),
+                                      ),
+                                    );
+                                  } finally {
+                                    setState(() => _isLoading = false);
+                                  }
+                                }
+                              },
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                'Masuk',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                       ),
-                    ],
-                  ),
-                )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),
