@@ -474,11 +474,9 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-// Kelas State yang menyimpan data dinamis untuk HomePage
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0; // Variabel untuk menyimpan indeks tab yang aktif
 
-  // Daftar widget halaman yang ditampilkan berdasarkan tab yang dipilih
   late final List<Widget> _pages;
 
   @override
@@ -488,7 +486,8 @@ class _HomePageState extends State<HomePage> {
       const Center(child: Text('Ini halaman Beranda')),
       const Center(child: Text('Ini halaman Bookmark')),
       const Center(child: Text('Ini halaman Cart')),
-      ProfilePage(userId: widget.userId),
+      ProfilePage(
+          userId: widget.userId.toString()), // Menggunakan userId dari widget
     ];
   }
 

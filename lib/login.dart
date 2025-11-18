@@ -38,17 +38,11 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: emailController,
                       decoration: const InputDecoration(
-                        labelText: 'Email',
-                        hintText: 'Masukkan email',
+                        labelText: 'Username',
+                        hintText: 'Masukkan Username',
                         prefixIcon: Icon(Icons.email_outlined),
                         border: OutlineInputBorder(),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Email tidak boleh kosong';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -72,12 +66,6 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Kata sandi tidak boleh kosong';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 16),
                     SizedBox(
